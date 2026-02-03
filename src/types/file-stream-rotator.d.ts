@@ -1,5 +1,5 @@
 declare module 'file-stream-rotator' {
-  import type { WriteStream, WriteFileOptions } from 'fs'
+  import type { WriteFileOptions, WriteStream } from 'fs'
 
   export type StreamOptions = {
     filename: string

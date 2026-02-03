@@ -3,6 +3,8 @@ import * as FileStreamRotator from 'file-stream-rotator'
 import { mkdirSync, writeFileSync } from 'fs'
 import { platform } from 'os'
 import { v4 } from 'uuid'
+
+import { configFile } from './config'
 import { rebuildElectronTray } from './electron'
 import { BeeManager } from './lifecycle'
 import { logger } from './logger'
@@ -39,12 +41,12 @@ storage-incentives-enable: false`
 }
 
 export async function initializeBee() {
-  if (!checkPath('config.yaml')) {
-    logger.info('Creating new Bee config.yaml')
-    writeFileSync(getPath('config.yaml'), createConfiguration())
+  if (!checkPath(configFile)) {
+    logger.info(`Creating new Bee ${configFile}`)
+    writeFileSync(getPath(configFile), createConfiguration())
   }
 
-  const configPath = getPath('config.yaml')
+  const configPath = getPath(configFile)
   logger.debug(`Executing process: bee init --config=${configPath}`)
 
   return runProcess(getPath(getBeeExecutable()), ['init', `--config=${configPath}`], new AbortController())
@@ -74,7 +76,7 @@ async function launchBee(abortController?: AbortController) {
   if (!abortController) {
     abortController = new AbortController()
   }
-  const configPath = getPath('config.yaml')
+  const configPath = getPath(configFile)
 
   logger.debug(`Executing process: bee start --config=${configPath}`)
 

@@ -1,10 +1,12 @@
 import { Bee } from '@ethersphere/bee-js'
-// eslint-disable-next-line unused-imports/no-unused-imports
-import { BEE_NODE_URL, getAllPostageBatch, getBeeInstance, handleFileUpload, nodeIsConnected } from '../bee-api'
+
+import { BEE_NODE_URL } from '../../../../config'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { getAllPostageBatch, getBeeInstance, handleFileUpload, nodeIsConnected } from '../bee-api'
 
 jest.mock('@ethersphere/bee-js', () => {
   return {
-    Bee: jest.fn().mockImplementation(url => {
+    Bee: jest.fn().mockImplementation(_ => {
       return {
         isConnected: jest.fn(),
         getAllPostageBatch: jest.fn(),
@@ -19,6 +21,7 @@ describe('Bee utility functions', () => {
 
   beforeEach(() => {
     mockBeeInstance = new Bee(BEE_NODE_URL) as jest.Mocked<Bee>
+    // eslint-disable-next-line no-import-assign
     ;(getBeeInstance as jest.Mock) = jest.fn(() => mockBeeInstance)
   })
 
@@ -41,7 +44,7 @@ describe('Bee utility functions', () => {
 
   describe('getAllPostageBatch', () => {
     it('should return only usable postage batches', async () => {
-      mockBeeInstance.getAllPostageBatch.mockResolvedValue([
+      mockBeeInstance.getPostageBatches.mockResolvedValue([
         { batchID: 'batch1', usable: true },
         { batchID: 'batch2', usable: false },
         { batchID: 'batch3', usable: true },
@@ -53,11 +56,11 @@ describe('Bee utility functions', () => {
         { batchID: 'batch1', usable: true },
         { batchID: 'batch3', usable: true },
       ])
-      expect(mockBeeInstance.getAllPostageBatch).toHaveBeenCalled()
+      expect(mockBeeInstance.getPostageBatches).toHaveBeenCalled()
     })
 
     it('should throw an error if getAllPostageBatch fails', async () => {
-      mockBeeInstance.getAllPostageBatch.mockRejectedValue(new Error('Failed to fetch batches'))
+      mockBeeInstance.getPostageBatches.mockRejectedValue(new Error('Failed to fetch batches'))
 
       await expect(getAllPostageBatch()).rejects.toThrow('Failed to fetch batches')
     })

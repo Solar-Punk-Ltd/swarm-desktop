@@ -1,11 +1,12 @@
 import { app, BrowserWindow, Menu, nativeTheme, Tray } from 'electron'
 import opener from 'opener'
-import { openDashboardInBrowser, openUrl, openPath } from './browser'
+
+import * as screenshot from './plugins/screenshot'
+import { openDashboardInBrowser, openPath, openUrl } from './browser'
 import { runLauncher } from './launcher'
 import { BeeManager } from './lifecycle'
 import { createNotification } from './notify'
 import { getAssetPath, paths } from './path'
-import * as screenshot from './plugins/screenshot'
 
 let tray: Tray
 let sCaptureWindow: BrowserWindow
@@ -36,7 +37,7 @@ export function rebuildElectronTray() {
       label: 'Apps',
       submenu: [
         {
-          label: 'FDP',
+          label: 'FDP', // TODO: remove FDP, not maintained
           click: () => openPath('/fdp'),
         },
         {
@@ -44,7 +45,7 @@ export function rebuildElectronTray() {
           click: () => openUrl('https://app.datafund.io'),
         },
         {
-          label: 'Devcon.buzz',
+          label: 'Devcon.buzz', // TODO: replace with https://dapp.bbw2025.buzz/
           click: () => openUrl('https://devcon.buzz'),
         },
         {

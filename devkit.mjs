@@ -6,6 +6,7 @@ import open from 'open'
 import cpy from 'cpy'
 import { readFile, rm } from 'node:fs/promises'
 import { join } from 'node:path'
+import process from 'node:process'
 
 const paths = envPaths('Swarm Desktop', { suffix: '' })
 const requestedCommand = process.argv[2]
