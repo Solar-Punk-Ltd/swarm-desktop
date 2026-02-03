@@ -1,8 +1,8 @@
 {
   "ignores": [
+    "@commitlint/*",
     "@electron-forge/*",
     "@types/*",
-    "@kayahr/jest-electron-runner",
     "@eslint/*",
     "@typescript-eslint/*",
     "eslint*",
@@ -15,6 +15,7 @@
     "cpy",
     "open",
     "rimraf",
-    "prettier"
+    "prettier",
+    "husky"
   ]
 }

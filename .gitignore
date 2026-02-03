@@ -5,9 +5,9 @@
 # js
 node_modules
 
-# electron
-dist
-build
+# electron and vite
+**/dist/
+**/build/
 out
 
 # bee

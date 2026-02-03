@@ -55,6 +55,7 @@ export default defineConfig([
     ignores: [
       '**/node_modules/**',
       '**/build/**',
+      '**/dist/**',
       'eslint.config.mjs',
       'eslint-compat.cjs',
       'assets/**',
