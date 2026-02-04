@@ -8,7 +8,8 @@ node_modules
 # electron and vite
 **/dist/
 **/build/
-out
+audit.json
+
 
 # bee
 bee

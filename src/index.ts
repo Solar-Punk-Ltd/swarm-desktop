@@ -1,6 +1,5 @@
 import { app, dialog } from 'electron'
 import squirrelInstallingExecution from 'electron-squirrel-startup'
-import updater from 'update-electron-app'
 
 import PACKAGE_JSON from '../package.json'
 
@@ -44,9 +43,28 @@ async function main() {
 
   splash = await initSplash()
 
+  // TODO: fix updater loading
   // Auto updater
-  // @ts-expect-error: https://github.com/electron/update-electron-app/pull/96
-  updater({ logger: { log: (...args) => logger.info(...args) } })
+  try {
+    const updateModule = await import('update-electron-app')
+    const updater = updateModule.default || updateModule
+
+    if (typeof updater === 'function') {
+      // @ts-expect-error: https://github.com/electron/update-electron-app/pull/96
+      updater({
+        logger: {
+          log: (message: string) => logger.info(message),
+          info: (message: string) => logger.info(message),
+          error: (message: string) => logger.error(message),
+          warn: (message: string) => logger.warn(message),
+        },
+      })
+
+      logger.error('Succes: initialized auto-updater.')
+    }
+  } catch (error) {
+    logger.error('Failed to initialize auto-updater:', error)
+  }
 
   // check if the assets and the bee binary matches the desktop version
   const desktopFileVersion = getDesktopVersionFromFile()

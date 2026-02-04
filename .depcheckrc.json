@@ -3,6 +3,7 @@
     "@commitlint/*",
     "@electron-forge/*",
     "@eslint/*",
+    "@ethereumjs/*",
     "@types/*",
     "@typescript-eslint/*",
     "eslint*",
