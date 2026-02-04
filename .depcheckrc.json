@@ -2,8 +2,8 @@
   "ignores": [
     "@commitlint/*",
     "@electron-forge/*",
-    "@types/*",
     "@eslint/*",
+    "@types/*",
     "@typescript-eslint/*",
     "eslint*",
     "typescript",

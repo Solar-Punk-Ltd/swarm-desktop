@@ -2,7 +2,7 @@ import { desktopCapturer, dialog, ipcMain, nativeImage } from 'electron'
 
 import { logger } from '../../logger'
 
-import { getAllPostageBatch, handleFileUpload, nodeIsConnected } from './utils/bee-api'
+import { getPostageBatches, handleFileUpload, nodeIsConnected } from './utils/bee-api'
 import { captureWindow } from './windows/capture/capture'
 import { createCropWindow } from './windows/crop/crop'
 import type { CropImageArgs } from './windows/crop/crop-preload'
@@ -63,13 +63,13 @@ function takeScreenshotImplementation() {
   })
 
   ipcMain.handle('get-all-postage-batch', async () => {
-    return await getAllPostageBatch()
+    return await getPostageBatches()
   })
 
   ipcMain.on('create-postage-stamp', evnt => {
     const getAllPostageBatchIntervalID = setInterval(async () => {
       try {
-        const ps = await getAllPostageBatch()
+        const ps = await getPostageBatches()
 
         if (ps.length) {
           clearInterval(getAllPostageBatchIntervalID)

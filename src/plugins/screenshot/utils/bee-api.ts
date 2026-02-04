@@ -22,7 +22,7 @@ export const nodeIsConnected = async () => {
   }
 }
 
-export const getAllPostageBatch = async () => {
+export const getPostageBatches = async () => {
   const bee = getBeeInstance()
 
   if (!bee) {

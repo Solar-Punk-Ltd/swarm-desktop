@@ -1,15 +1,31 @@
 import { Bee } from '@ethersphere/bee-js'
 
-import { BEE_NODE_URL } from '../../../../config'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { getAllPostageBatch, getBeeInstance, handleFileUpload, nodeIsConnected } from '../bee-api'
+import { BEE_NODE_URL } from '../src/config'
+import {
+  getBeeInstance, // eslint-disable-line @typescript-eslint/no-unused-vars
+  getPostageBatches,
+  handleFileUpload,
+  nodeIsConnected,
+} from '../src/plugins/screenshot/utils/bee-api'
+
+jest.mock(
+  'env-paths',
+  () => () =>
+    jest.fn().mockImplementation(() => ({
+      data: 'test/data',
+      config: 'test/data',
+      cache: 'test/data',
+      log: 'test/data',
+      temp: 'test/data',
+    })),
+)
 
 jest.mock('@ethersphere/bee-js', () => {
   return {
     Bee: jest.fn().mockImplementation(_ => {
       return {
         isConnected: jest.fn(),
-        getAllPostageBatch: jest.fn(),
+        getPostageBatches: jest.fn(),
         uploadFile: jest.fn(),
       }
     }),
@@ -42,7 +58,7 @@ describe('Bee utility functions', () => {
     })
   })
 
-  describe('getAllPostageBatch', () => {
+  describe('getPostageBatches', () => {
     it('should return only usable postage batches', async () => {
       mockBeeInstance.getPostageBatches.mockResolvedValue([
         { batchID: 'batch1', usable: true },
@@ -50,7 +66,7 @@ describe('Bee utility functions', () => {
         { batchID: 'batch3', usable: true },
       ] as any)
 
-      const result = await getAllPostageBatch()
+      const result = await getPostageBatches()
 
       expect(result).toEqual([
         { batchID: 'batch1', usable: true },
@@ -59,10 +75,10 @@ describe('Bee utility functions', () => {
       expect(mockBeeInstance.getPostageBatches).toHaveBeenCalled()
     })
 
-    it('should throw an error if getAllPostageBatch fails', async () => {
+    it('should throw an error if getPostageBatches fails', async () => {
       mockBeeInstance.getPostageBatches.mockRejectedValue(new Error('Failed to fetch batches'))
 
-      await expect(getAllPostageBatch()).rejects.toThrow('Failed to fetch batches')
+      await expect(getPostageBatches()).rejects.toThrow('Failed to fetch batches')
     })
   })
 

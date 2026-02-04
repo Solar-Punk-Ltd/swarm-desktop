@@ -17,11 +17,11 @@ jobs:
         node-version: [20.x]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           cache: pnpm
           node-version: ${{ matrix.node-version }}
@@ -36,7 +36,9 @@ jobs:
           REACT_APP_FORMBRICKS_APP_URL: ${{ secrets.REACT_APP_FORMBRICKS_APP_URL }}
 
       - name: Commit linting
-        uses: wagoid/commitlint-github-action@v2
+        uses: wagoid/commitlint-github-action@v6
+        with:
+          configFile: ./commitlint.config.cjs
 
       - name: Code linting
         run: pnpm run lint

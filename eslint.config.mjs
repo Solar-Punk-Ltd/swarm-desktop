@@ -59,8 +59,9 @@ export default defineConfig([
       'eslint.config.mjs',
       'eslint-compat.cjs',
       'assets/**',
-      'commitlint.config.js',
+      'commitlint.config.cjs',
       'test/data/**',
+      '*.html',
     ],
   },
   {
