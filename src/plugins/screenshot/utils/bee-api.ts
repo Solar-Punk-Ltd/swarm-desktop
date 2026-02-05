@@ -1,8 +1,8 @@
 import { BatchId, Bee, FileUploadOptions, RedundantUploadOptions } from '@ethersphere/bee-js'
 
-import { BEE_NODE_URL } from '../../../config'
+import { BEE_NODE_URL, DEFAULT_ELECTRON_API_PORT } from '../../../config'
 
-export const BEE_DASHBOARD_URL = 'http://localhost:3054/dashboard/?#/account/stamps'
+export const BEE_DASHBOARD_URL = `http://localhost:${DEFAULT_ELECTRON_API_PORT}/dashboard/?#/account/stamps`
 
 let bee: Bee | null = null
 

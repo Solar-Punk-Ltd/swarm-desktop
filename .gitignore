@@ -9,6 +9,7 @@ node_modules
 **/dist/
 **/build/
 audit.json
+out/
 
 
 # bee

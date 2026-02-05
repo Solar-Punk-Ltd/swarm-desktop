@@ -2,7 +2,6 @@
   "name": "swarm-desktop-ui",
   "version": "0.2.0",
   "private": true,
-  "homepage": "http://localhost:5000/dashboard",
   "dependencies": {
     "@ethersphere/bee-dashboard": "file:../../bee-dashboard",
     "@types/node": "^25.2.0",

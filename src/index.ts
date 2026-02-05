@@ -43,14 +43,12 @@ async function main() {
 
   splash = await initSplash()
 
-  // TODO: fix updater loading
-  // Auto updater
+  // Auto updater, latest version fails during import
   try {
     const updateModule = await import('update-electron-app')
     const updater = updateModule.default || updateModule
 
     if (typeof updater === 'function') {
-      // @ts-expect-error: https://github.com/electron/update-electron-app/pull/96
       updater({
         logger: {
           log: (message: string) => logger.info(message),
@@ -60,7 +58,9 @@ async function main() {
         },
       })
 
-      logger.error('Succes: initialized auto-updater.')
+      logger.info('Initialized auto-updater.')
+    } else {
+      logger.warn('Cannot initialize auto-updater.')
     }
   } catch (error) {
     logger.error('Failed to initialize auto-updater:', error)

@@ -2,10 +2,13 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 
+import { DEFAULT_VITE_DEV_PORT } from '../src/config'
+
 export default defineConfig(({ mode }) => {
   const isProd = mode === 'production'
 
   return {
+    base: './',
     plugins: [react()],
     resolve: {
       alias: {
@@ -33,7 +36,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      port: 3002,
+      port: DEFAULT_VITE_DEV_PORT,
       open: true,
     },
     publicDir: 'public',
