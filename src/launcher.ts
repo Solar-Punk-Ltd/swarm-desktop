@@ -1,13 +1,13 @@
 import { spawn } from 'child_process'
-import * as FileStreamRotator from 'file-stream-rotator'
 import { mkdirSync, writeFileSync } from 'fs'
 import { platform } from 'os'
+import * as RotatingFileStream from 'rotating-file-stream'
 import { v4 } from 'uuid'
 
 import { configFile } from './config'
 import { rebuildElectronTray } from './electron'
 import { BeeManager } from './lifecycle'
-import { logger } from './logger'
+import { BeeLogFile, logger } from './logger'
 import { checkPath, getLogPath, getPath } from './path'
 
 export function runKeepAliveLoop() {
@@ -92,14 +92,10 @@ async function runProcess(command: string, args: string[], abortController: Abor
     subprocess.stderr.pipe(process.stderr)
 
     // Also store the logs to log dir
-    const fileStream = FileStreamRotator.getStream({
-      filename: getLogPath('bee'),
-      verbose: false,
-      size: '500k',
-      max_logs: '10',
-      extension: '.log',
-      create_symlink: true,
-      symlink_name: 'bee.current.log',
+    const fileStream = RotatingFileStream.createStream(BeeLogFile, {
+      size: '500K',
+      maxFiles: 10,
+      path: getLogPath(''),
     })
     fileStream.on('error', err => logger.error(err))
 

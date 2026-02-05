@@ -103,7 +103,6 @@
     "electron-squirrel-startup": "^1.0.1",
     "env-paths": "^4.0.0",
     "ethers": "^6.16.0",
-    "file-stream-rotator": "^1.0.0",
     "fs-extra": "^11.3.3",
     "js-yaml": "^4.1.1",
     "koa": "^3.1.1",
@@ -114,6 +113,7 @@
     "node-notifier": "^10.0.1",
     "opener": "^1.5.2",
     "request-stats": "^3.0.0",
+    "rotating-file-stream": "^3.2.8",
     "update-electron-app": "^2.0.1",
     "uuid": "^13.0.0",
     "winston": "^3.19.0"
