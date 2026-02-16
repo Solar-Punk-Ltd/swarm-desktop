@@ -319,7 +319,7 @@
             const spinnerContainer = spinnerUI((width = "36px"), (height = "36px"));
 
             try {
-                const psBatches = await window.electron.getAllPostageBatch();
+                const psBatches = await window.electron.getPostageBatches();
 
                 if (psBatches.length) {
                     listAvailableStampUI(h2, psBatches, container, row, modalContent);

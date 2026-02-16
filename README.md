@@ -83,16 +83,16 @@ running. You have to open them manually.
 
 #### Electron Desktop
 
-To work on the Electron Desktop back-end you just need to do your work and then run `npm start`. This will launch the
+To work on the Electron Desktop back-end you just need to do your work and then run `pnpm start`. This will launch the
 Electron app and shows the Tray icon. No UI will be opened automatically. If you need to make more adjustment you have
 to exit the process with `SIGINT (CTRL+C)` and relaunch.
 
 #### UI (Dashboard)
 
-To work on the Dashboard, run first `npm start` that will spin up the Electron Desktop back-end. Then go to your locally
-cloned `bee-dashboard` repo and in it start the development server with `npm start`. Dashboard also needs to have API
-key injected in order to use the Desktop's API. You can inject it by running `npm run desktop` in the Dashboard repo
-that will open the Dashboard UI with API key in the URL. Changes are automatically hot-reloaded.
+To work on the Dashboard, run first `pnpm start` that will spin up the Electron Desktop back-end. Then go to your
+locally cloned `bee-dashboard` repo and in it start the development server with `pnpm start`. Dashboard also needs to
+have API key injected in order to use the Desktop's API. You can inject it by running `pnpm run desktop` in the
+Dashboard repo that will open the Dashboard UI with API key in the URL. Changes are automatically hot-reloaded.
 
 The UI served by the Desktop itself is updated only when you update the `@ethersphere/bee-dashboard` NPM package in the
 Desktop repo.
@@ -101,8 +101,8 @@ Desktop repo.
 
 There are several handy scripts:
 
-- `npm run purge:data` that purge's the Desktop's data folder
-- `npm run purge:logs` that purge's the Desktop's logs folder
+- `pnpm run purge:data` that purge's the Desktop's data folder
+- `pnpm run purge:logs` that purge's the Desktop's logs folder
 
 ## Maintainers
 

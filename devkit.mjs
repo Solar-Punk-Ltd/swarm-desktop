@@ -6,7 +6,10 @@ import open from 'open'
 import cpy from 'cpy'
 import { readFile, rm } from 'node:fs/promises'
 import { join } from 'node:path'
+import process from 'node:process'
 
+const DEFAULT_VITE_DEV_PORT = 3002
+const API_KEY_FILE = 'api-key.txt'
 const paths = envPaths('Swarm Desktop', { suffix: '' })
 const requestedCommand = process.argv[2]
 
@@ -40,8 +43,8 @@ function copyUi() {
 }
 
 async function openUi() {
-  const apiKey = await readFile(join(paths.data, 'api-key.txt'), { encoding: 'utf-8' })
-  const url = `http://localhost:3002/?v=${apiKey}#/`
+  const apiKey = await readFile(join(paths.data, API_KEY_FILE), { encoding: 'utf-8' })
+  const url = `http://localhost:${DEFAULT_VITE_DEV_PORT}/?v=${apiKey}#/`
 
   console.log('Opening: ' + url)
   await open(url)

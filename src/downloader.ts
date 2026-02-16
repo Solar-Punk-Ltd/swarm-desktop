@@ -5,6 +5,7 @@ import fetch from 'node-fetch'
 import { arch, platform } from 'os'
 import { parse } from 'path'
 import { promisify } from 'util'
+
 import { logger } from './logger'
 import { getPath, paths } from './path'
 
