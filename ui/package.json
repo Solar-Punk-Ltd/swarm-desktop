@@ -4,13 +4,14 @@
   "private": true,
   "homepage": "http://localhost:5000/dashboard",
   "dependencies": {
-    "@ethersphere/bee-dashboard": "^0.33.4",
-    "@types/jest": "^28.1.3",
-    "@types/node": "^20.19.0",
-    "@types/react": "^17.0.34",
-    "@types/react-dom": "^17.0.11",
-    "react": "~17.0.2",
-    "react-dom": "~17.0.2"
+    "@ethersphere/bee-dashboard": "file:../../../bee-dashboard",
+    "@types/node": "^25.2.0",
+    "@types/react": "^19.2.10",
+    "@types/react-dom": "^19.2.3",
+    "react": "~19.2.4",
+    "react-dom": "~19.2.4",
+    "react-router": "7.13.0",
+    "react-router-dom": "7.13.0"
   },
   "scripts": {
     "start": "vite start",
@@ -39,7 +40,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-unused-imports": "^2.0.0",
     "prettier": "^2.8.8",
-    "typescript": "~4.9.5",
+    "typescript": "~5.9.3",
     "vite": "^7.3.1"
   },
   "pnpm": {

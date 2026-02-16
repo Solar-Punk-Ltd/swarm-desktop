@@ -1,5 +1,5 @@
+import { Wallet } from '@ethereumjs/wallet'
 import Router from '@koa/router'
-import Wallet from 'ethereumjs-wallet'
 import { readFile } from 'fs/promises'
 import Koa from 'koa'
 import koaBodyparser from 'koa-bodyparser'
@@ -9,9 +9,10 @@ import fetch from 'node-fetch'
 import * as path from 'path'
 
 import PACKAGE_JSON from '../package.json'
+
 import { getApiKey } from './api-key'
 import { sendBzzTransaction, sendNativeTransaction } from './blockchain'
-import { readConfigYaml, readWalletPasswordOrThrow, writeConfigYaml } from './config'
+import { BEE_NODE_URL, readConfigYaml, readWalletPasswordOrThrow, writeConfigYaml } from './config'
 import { runLauncher } from './launcher'
 import { BeeManager } from './lifecycle'
 import { logger, readBeeDesktopLogs, readBeeLogs, subscribeLogServerRequests } from './logger'
@@ -21,8 +22,13 @@ import { getStatus } from './status'
 import { swap } from './swap'
 
 const UI_DIST = path.join(__dirname, '..', '..', 'ui')
-
 const AUTO_UPDATE_ENABLED_PLATFORMS = ['darwin', 'win32']
+const TOKEN_SERVICE_URL = 'https://tokenservice.ethswarm.org/token_price'
+
+interface PeersResponse {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  peers?: any[]
+}
 
 export function runServer() {
   const app = new Koa()
@@ -54,7 +60,7 @@ export function runServer() {
   })
   router.get('/price', async context => {
     try {
-      const response = await fetch('https://tokenservice.ethswarm.org/token_price')
+      const response = await fetch(TOKEN_SERVICE_URL)
       context.body = await response.text()
     } catch (error) {
       logger.error(error)
@@ -81,8 +87,8 @@ export function runServer() {
   })
   router.get('/peers', async context => {
     try {
-      const response = await fetch('http://127.0.0.1:1633/peers')
-      const { peers } = await response.json()
+      const response = await fetch(`${BEE_NODE_URL}/peers`)
+      const { peers } = (await response.json()) as PeersResponse
 
       context.body = { connections: peers ? peers.length || 0 : 0 }
     } catch (error) {

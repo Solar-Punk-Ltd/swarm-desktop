@@ -1,5 +1,6 @@
 {
   "ignores": [
+    "@ethereumjs/*",
     "@electron-forge/*",
     "@types/*",
     "@kayahr/jest-electron-runner",
@@ -10,6 +11,7 @@
     "concurrently",
     "cross-env",
     "cpy",
-    "open"
+    "open",
+    "rimraf"
   ]
 }
