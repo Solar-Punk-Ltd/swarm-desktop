@@ -6,6 +6,7 @@ import { readConfigYaml } from './config'
 
 interface Status {
   address?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   config?: Record<string, any>
   assetsReady: boolean
 }

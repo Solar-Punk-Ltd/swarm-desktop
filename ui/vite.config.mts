@@ -26,7 +26,9 @@ export default defineConfig(({ mode }) => {
           manualChunks(id) {
             if (id.includes('node_modules')) {
               if (id.includes('@ethersphere/bee-dashboard')) return 'vendor-bee-dashboard'
+
               if (id.includes('react')) return 'vendor-react'
+
               return 'vendor'
             }
           },

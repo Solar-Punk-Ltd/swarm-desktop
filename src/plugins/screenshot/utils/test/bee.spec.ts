@@ -4,7 +4,7 @@ import { BEE_NODE_URL, getAllPostageBatch, getBeeInstance, handleFileUpload, nod
 
 jest.mock('@ethersphere/bee-js', () => {
   return {
-    Bee: jest.fn().mockImplementation(url => {
+    Bee: jest.fn().mockImplementation(_ => {
       return {
         isConnected: jest.fn(),
         getAllPostageBatch: jest.fn(),
@@ -45,6 +45,7 @@ describe('Bee utility functions', () => {
         { batchID: 'batch1', usable: true },
         { batchID: 'batch2', usable: false },
         { batchID: 'batch3', usable: true },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ] as any)
 
       const result = await getAllPostageBatch()
@@ -70,6 +71,7 @@ describe('Bee utility functions', () => {
         tagUid: 12,
         historyAddress: 'string',
         cid: () => 'string',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any
 
       const args = {
