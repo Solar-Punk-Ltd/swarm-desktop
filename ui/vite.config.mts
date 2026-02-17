@@ -2,6 +2,8 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 
+const DEFAULT_VITE_DEV_PORT = 3002
+
 export default defineConfig(({ mode }) => {
   const isProd = mode === 'production'
 
@@ -36,7 +38,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      port: 3002,
+      port: DEFAULT_VITE_DEV_PORT,
       open: true,
     },
     publicDir: 'public',

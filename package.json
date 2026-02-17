@@ -122,9 +122,7 @@
       "electron",
       "electron-winstaller",
       "fs-xattr",
-      "keccak",
       "macos-alias",
-      "secp256k1",
       "unrs-resolver"
     ]
   },
