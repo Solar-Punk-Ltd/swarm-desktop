@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["src", "test", "jest.config.ts", ".eslintrc.js"],
+  "include": ["src", "test", "jest.config.ts", ".eslintrc.js", "devkit.mjs", "forge.config.js"], // TODO: update eslint and fix errors
   "compilerOptions": {
     "noEmit": true
   }
