@@ -8,6 +8,8 @@ import { getLogPath } from './path'
 
 export const DesktopLogFile = 'bee-desktop.log'
 export const BeeLogFile = 'bee.log'
+export const MaxLogFileRotateSize = '500K'
+export const MaxLogFileNumber = 10
 
 const supportedLevels: Record<string, number> = SUPPORTED_LEVELS.reduce(
   (acc, cur, idx) => ({ ...acc, [cur]: idx }),

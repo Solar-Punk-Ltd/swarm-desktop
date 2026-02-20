@@ -4,11 +4,11 @@ import { platform } from 'os'
 import * as RotatingFileStream from 'rotating-file-stream'
 import { v4 } from 'uuid'
 
-import { configFile } from './config'
+import { configFile, dataDirFilePath } from './config'
 import { rebuildElectronTray } from './electron'
 import { BeeManager } from './lifecycle'
-import { BeeLogFile, logger } from './logger'
-import { checkPath, getLogPath, getPath } from './path'
+import { BeeLogFile, logger, MaxLogFileNumber, MaxLogFileRotateSize } from './logger'
+import { checkPath, getDefaultLogPath, getPath } from './path'
 
 export function runKeepAliveLoop() {
   setInterval(() => {
@@ -35,7 +35,7 @@ cors-allowed-origins: '*'
 use-postage-snapshot: false
 skip-postage-snapshot: true
 resolver-options: https://cloudflare-eth.com
-data-dir: ${getPath('data-dir')}
+data-dir: ${getPath(dataDirFilePath)}
 password: ${v4()}
 storage-incentives-enable: false`
 }
@@ -55,8 +55,8 @@ export async function initializeBee() {
 export async function runLauncher() {
   const abortController = new AbortController()
 
-  if (!checkPath('data-dir')) {
-    mkdirSync(getPath('data-dir'))
+  if (!checkPath(dataDirFilePath)) {
+    mkdirSync(getPath(dataDirFilePath))
   }
 
   BeeManager.setUserIntention(true)
@@ -93,9 +93,9 @@ async function runProcess(command: string, args: string[], abortController: Abor
 
     // Also store the logs to log dir
     const fileStream = RotatingFileStream.createStream(BeeLogFile, {
-      size: '500K',
-      maxFiles: 10,
-      path: getLogPath(''),
+      size: MaxLogFileRotateSize,
+      maxFiles: MaxLogFileNumber,
+      path: getDefaultLogPath(),
     })
     fileStream.on('error', err => logger.error(err))
 
