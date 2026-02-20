@@ -64,6 +64,7 @@ describe('Bee utility functions', () => {
         { batchID: 'batch1', usable: true },
         { batchID: 'batch2', usable: false },
         { batchID: 'batch3', usable: true },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ] as any)
 
       const result = await getPostageBatches()
@@ -89,6 +90,7 @@ describe('Bee utility functions', () => {
         tagUid: 12,
         historyAddress: 'string',
         cid: () => 'string',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any
 
       const args = {

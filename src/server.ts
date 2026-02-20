@@ -24,7 +24,7 @@ import { swap } from './swap'
 const UI_DIST = path.join(__dirname, '..', '..', 'ui')
 const AUTO_UPDATE_ENABLED_PLATFORMS = ['darwin', 'win32']
 const TOKEN_SERVICE_URL = 'https://tokenservice.ethswarm.org/token_price'
-const PEERS_ENDPOINT = "/peers"
+const PEERS_ENDPOINT = '/peers'
 
 interface PeersResponse {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

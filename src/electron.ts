@@ -37,7 +37,6 @@ export function rebuildElectronTray() {
       label: 'Apps',
       submenu: [
         {
-          // eslint-disable-next-line no-warning-comments
           label: 'FDP', // TODO: remove FDP, not maintained
           click: () => openPath('/fdp'),
         },
@@ -46,7 +45,6 @@ export function rebuildElectronTray() {
           click: () => openUrl('https://app.datafund.io'),
         },
         {
-          // eslint-disable-next-line no-warning-comments
           label: 'Devcon.buzz', // TODO: replace with https://dapp.bbw2025.buzz/
           click: () => openUrl('https://devcon.buzz'),
         },

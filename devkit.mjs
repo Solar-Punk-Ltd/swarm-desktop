@@ -46,7 +46,6 @@ async function openUi() {
   const apiKey = await readFile(join(paths.data, API_KEY_FILE), { encoding: 'utf-8' })
   const url = `http://localhost:${DEFAULT_VITE_DEV_PORT}/?v=${apiKey}#/`
 
-  // eslint-disable-next-line no-console
   console.log('Opening: ' + url)
   await open(url)
 }
