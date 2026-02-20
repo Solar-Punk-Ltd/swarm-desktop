@@ -12,8 +12,12 @@ export function getPath(path: string): string {
   return join(paths.data, path)
 }
 
-export function getDefaultLogPath(logFileName: string): string {
+export function getLogPath(logFileName: string): string {
   return join(paths.log, logFileName)
+}
+
+export function getDefaultLogPath(): string {
+  return getLogPath('')
 }
 
 export function getAssetPath(path: string): string {

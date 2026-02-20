@@ -4,7 +4,7 @@ import requestStats from 'request-stats'
 import { createLogger, format, Logform, Logger, transports } from 'winston'
 
 import { logLevel, SUPPORTED_LEVELS } from './config'
-import { getDefaultLogPath } from './path'
+import { getLogPath } from './path'
 
 export const DesktopLogFile = 'bee-desktop.log'
 export const BeeLogFile = 'bee.log'
@@ -28,7 +28,7 @@ export const logger: Logger = createLogger({
   transports: [
     new transports.Console({ level: logLevel, format: format.colorize({ all: true }) }),
     new transports.File({
-      filename: getDefaultLogPath(DesktopLogFile),
+      filename: getLogPath(DesktopLogFile),
       maxsize: 1_000_000,
       maxFiles: 10,
       tailable: true,
@@ -76,9 +76,9 @@ export function subscribeLogServerRequests(server: Server): void {
 }
 
 export async function readBeeDesktopLogs(): Promise<string> {
-  return readFile(getDefaultLogPath(DesktopLogFile), { encoding: 'utf8' })
+  return readFile(getLogPath(DesktopLogFile), { encoding: 'utf8' })
 }
 
 export async function readBeeLogs(): Promise<string> {
-  return readFile(getDefaultLogPath(BeeLogFile), { encoding: 'utf8' })
+  return readFile(getLogPath(BeeLogFile), { encoding: 'utf8' })
 }

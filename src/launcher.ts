@@ -95,7 +95,7 @@ async function runProcess(command: string, args: string[], abortController: Abor
     const fileStream = RotatingFileStream.createStream(BeeLogFile, {
       size: MaxLogFileRotateSize,
       maxFiles: MaxLogFileNumber,
-      path: getDefaultLogPath(''),
+      path: getDefaultLogPath(),
     })
     fileStream.on('error', err => logger.error(err))
 
