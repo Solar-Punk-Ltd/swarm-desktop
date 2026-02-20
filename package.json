@@ -30,7 +30,8 @@
     "lint": "eslint . --report-unused-disable-directives --no-cache --max-warnings=5 && cd ui && pnpm run lint",
     "lint:fix": "eslint . --report-unused-disable-directives --no-cache --max-warnings=5 --fix && cd ui && pnpm run lint:fix",
     "check:types": "tsc --project tsconfig.json --noEmit && cd ui && tsc --project tsconfig.json --noEmit",
-    "test:unit": "jest --config=jest.config.ts --runInBand --verbose"
+    "test:unit": "jest --config=jest.config.ts --runInBand --verbose",
+    "init:husky": "pnpm husky install"
   },
   "keywords": [
     "bee",

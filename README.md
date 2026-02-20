@@ -101,6 +101,7 @@ Desktop repo.
 
 There are several handy scripts:
 
+- `pnpm run init:husky` that initializes husky for commit linting
 - `pnpm run purge:data` that purge's the Desktop's data folder
 - `pnpm run purge:logs` that purge's the Desktop's logs folder
 
