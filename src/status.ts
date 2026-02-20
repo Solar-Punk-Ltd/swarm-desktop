@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs'
 import { join } from 'path'
 
-import { configFile, readConfigYaml } from './config'
+import { configFile, dataDirFilePath, readConfigYaml } from './config'
 import { isBeeAssetReady } from './downloader'
 import { checkPath, getPath } from './path'
 
@@ -17,7 +17,7 @@ export function getStatus() {
     assetsReady: isBeeAssetReady(),
   }
 
-  if (!checkPath(configFile) || !checkPath('data-dir')) {
+  if (!checkPath(configFile) || !checkPath(dataDirFilePath)) {
     return status
   }
 
@@ -28,7 +28,7 @@ export function getStatus() {
 }
 
 function readEthereumAddress() {
-  const path = getPath(join('data-dir', 'keys', 'swarm.key'))
+  const path = getPath(join(dataDirFilePath, 'keys', 'swarm.key'))
   const swarmKeyFile = readFileSync(path, 'utf-8')
   const v3 = JSON.parse(swarmKeyFile)
 
