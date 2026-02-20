@@ -13,6 +13,7 @@ import { findFreePort } from './port'
 import { runServer } from './server'
 import { getStatus } from './status'
 
+// eslint-disable-next-line no-warning-comments
 // TODO: Add types definition
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore

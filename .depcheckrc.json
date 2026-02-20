@@ -6,6 +6,7 @@
     "electron-forge-maker-zip-all",
     "ts-jest",
     "ts-node",
+    "typescript",
     "concurrently",
     "cross-env",
     "cpy",

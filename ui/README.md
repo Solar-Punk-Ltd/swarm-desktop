@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available env. variables
 
-- `REACT_APP_BEE_DESKTOP_URL` specifies where the Desktop API backend is expected. By default, it is
+- `VITE_BEE_DESKTOP_URL` specifies where the Desktop API backend is expected. By default, it is
   `${window.location.protocol}//${window.location.host}`
 
 ## Available Scripts
