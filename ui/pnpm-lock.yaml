@@ -386,7 +386,7 @@ packages:
 
   '@ethersphere/bee-dashboard@file:../../../bee-dashboard':
     resolution: {directory: ../../../bee-dashboard, type: directory}
-    engines: {bee: 2.6.0, node: '>=24.0.0', npm: '>=11.0.0', pnpm: '>=10.0.0'}
+    engines: {bee: 2.7.0, node: '>=24.0.0', npm: '>=11.0.0', pnpm: '>=10.0.0'}
     hasBin: true
     peerDependencies:
       react: '>=19'
