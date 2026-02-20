@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "http://localhost:5000/dashboard",
   "dependencies": {
-    "@ethersphere/bee-dashboard": "file:../../../bee-dashboard",
+    "@ethersphere/bee-dashboard": "https://github.com/Solar-Punk-Ltd/bee-dashboard",
     "@types/node": "^25.2.0",
     "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
@@ -45,6 +45,7 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
+      "@ethersphere/bee-dashboard",
       "core-js",
       "core-js-pure",
       "esbuild"
