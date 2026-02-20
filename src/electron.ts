@@ -2,7 +2,7 @@ import { app, BrowserWindow, Menu, nativeTheme, Tray } from 'electron'
 import opener from 'opener'
 
 import * as screenshot from './plugins/screenshot'
-import { openDashboardInBrowser, openPath, openUrl } from './browser'
+import { openDashboardInBrowser, openUrl } from './browser'
 import { runLauncher } from './launcher'
 import { BeeManager } from './lifecycle'
 import { createNotification } from './notify'
@@ -37,16 +37,12 @@ export function rebuildElectronTray() {
       label: 'Apps',
       submenu: [
         {
-          label: 'FDP', // TODO: remove FDP, not maintained
-          click: () => openPath('/fdp'),
-        },
-        {
           label: 'Datafund App',
           click: () => openUrl('https://app.datafund.io'),
         },
         {
-          label: 'Devcon.buzz', // TODO: replace with https://dapp.bbw2025.buzz/
-          click: () => openUrl('https://devcon.buzz'),
+          label: 'bbw2025.buzz',
+          click: () => openUrl('https://dapp.bbw2025.buzz/'),
         },
         {
           label: 'Etherjot',
