@@ -11,24 +11,24 @@
   "repository": "https://github.com/ethersphere/swarm-desktop",
   "main": "dist/desktop/src/index.js",
   "scripts": {
-    "start": "concurrently -n \"desktop,ui\" \"cross-env-shell NODE_ENV=development 'npm run clean && npm run build && electron-forge start'\" \"cd ui && npm start\"",
+    "start": "concurrently -n \"desktop,ui\" \"cross-env-shell NODE_ENV=development 'pnpm run clean && pnpm run build && electron-forge start'\" \"cd ui && pnpm start\"",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "publish:mac:arm64": "electron-forge publish --platform=darwin --arch=arm64",
     "publish:mac:x64": "electron-forge publish --platform=darwin --arch=x64",
     "publish:linux:arm64": "electron-forge publish --platform=linux --arch=arm64",
-    "build:ui": "cd ui && npm run build && cd ..",
+    "build:ui": "cd ui && pnpm run build && cd ..",
     "build:desktop": "tsc",
-    "build": "npm run build:desktop && npm run build:ui && npm run copy:ui",
+    "build": "pnpm run build:desktop && pnpm run build:ui && pnpm run copy:ui",
     "copy:ui": "node devkit.mjs copy:ui",
     "open:ui": "node devkit.mjs open:ui",
     "purge:data": "node devkit.mjs purge:data",
     "purge:logs": "node devkit.mjs purge:logs",
     "clean": "rimraf dist out",
     "depcheck": "depcheck . && depcheck ui/",
-    "lint": "eslint --fix \"src/**/*.ts\" && cd ui && npm run lint",
-    "lint:check": "eslint \"src/**/*.ts\" && cd ui && npm run lint:check",
+    "lint": "eslint --fix \"src/**/*.ts\" && cd ui && pnpm run lint",
+    "lint:check": "eslint \"src/**/*.ts\" && cd ui && pnpm run lint:check",
     "check:types": "tsc --project tsconfig.test.json && cd ui && tsc --project tsconfig.test.json",
     "test:unit": "jest --verbose --config=jest.config.js"
   },
@@ -109,5 +109,15 @@
     "update-electron-app": "^2.0.1",
     "uuid": "^8.3.2",
     "winston": "^3.7.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "electron",
+      "electron-winstaller",
+      "fs-xattr",
+      "keccak",
+      "macos-alias",
+      "secp256k1"
+    ]
   }
 }

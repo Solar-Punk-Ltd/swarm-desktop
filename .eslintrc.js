@@ -1,6 +1,7 @@
 module.exports = {
   extends: ['plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended'],
   parserOptions: {
+    tsconfigRootDir: __dirname,
     project: './tsconfig.test.json',
   },
   env: {
