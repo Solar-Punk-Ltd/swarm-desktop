@@ -12,7 +12,7 @@ import PACKAGE_JSON from '../package.json'
 
 import { getApiKey } from './api-key'
 import { sendBzzTransaction, sendNativeTransaction } from './blockchain'
-import { BEE_NODE_URL, readConfigYaml, readWalletPasswordOrThrow, writeConfigYaml } from './config'
+import { BEE_NODE_URL, dataDirFilePath, readConfigYaml, readWalletPasswordOrThrow, writeConfigYaml } from './config'
 import { runLauncher } from './launcher'
 import { BeeManager } from './lifecycle'
 import { logger, readBeeDesktopLogs, readBeeLogs, subscribeLogServerRequests } from './logger'
@@ -24,6 +24,7 @@ import { swap } from './swap'
 const UI_DIST = path.join(__dirname, '..', '..', 'ui')
 const AUTO_UPDATE_ENABLED_PLATFORMS = ['darwin', 'win32']
 const TOKEN_SERVICE_URL = 'https://tokenservice.ethswarm.org/token_price'
+const PEERS_ENDPOINT = "/peers"
 
 interface PeersResponse {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -85,9 +86,9 @@ export function runServer() {
   router.get('/status', context => {
     context.body = getStatus()
   })
-  router.get('/peers', async context => {
+  router.get(PEERS_ENDPOINT, async context => {
     try {
-      const response = await fetch(`${BEE_NODE_URL}/peers`)
+      const response = await fetch(`${BEE_NODE_URL}${PEERS_ENDPOINT}`)
       const { peers } = (await response.json()) as PeersResponse
 
       context.body = { connections: peers ? peers.length || 0 : 0 }
@@ -156,7 +157,7 @@ export function runServer() {
 }
 
 async function getPrivateKey(): Promise<string> {
-  const v3 = await readFile(getPath(path.join('data-dir', 'keys', 'swarm.key')), 'utf-8')
+  const v3 = await readFile(getPath(path.join(dataDirFilePath, 'keys', 'swarm.key')), 'utf-8')
   const wallet = await Wallet.fromV3(v3, readWalletPasswordOrThrow())
   const privateKeyString = wallet.getPrivateKeyString()
 

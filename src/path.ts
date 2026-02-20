@@ -12,7 +12,7 @@ export function getPath(path: string): string {
   return join(paths.data, path)
 }
 
-export function getLogPath(logFileName: string): string {
+export function getDefaultLogPath(logFileName: string): string {
   return join(paths.log, logFileName)
 }
 

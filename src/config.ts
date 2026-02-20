@@ -13,6 +13,7 @@ export const BEE_NODE_URL = 'http://127.0.0.1:1633'
 export const SUPPORTED_LEVELS = ['critical', 'error', 'warn', 'info', 'verbose', 'debug']
 export const DEFAULT_LOG_LEVEL = 'info'
 export const configFile = 'config.yaml'
+export const dataDirFilePath = 'data-dir'
 const DESKTOP_VERSION_FILE = 'desktop.version'
 
 export const logLevel =
