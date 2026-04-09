@@ -41,11 +41,6 @@ export function rebuildElectronTray() {
           click: () => openUrl('https://bbw2025.buzz/'),
         },
         {
-          label: 'Etherjot',
-          click: () =>
-            openUrl('http://localhost:1633/bzz/00b7ef7c5d20cba4b06596b7652bb16ddec91c114069653dbcac7a19f0697915/'),
-        },
-        {
           label: 'Decentralized Wiki',
           click: () =>
             openUrl('http://localhost:1633/bzz/bc9b942212421e2a19fe1ffdf0add641ae530923041ea8f549381747b14b2f2d/'),
