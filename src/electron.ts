@@ -37,10 +37,6 @@ export function rebuildElectronTray() {
       label: 'Apps',
       submenu: [
         {
-          label: 'Datafund App',
-          click: () => openUrl('https://app.datafund.io'),
-        },
-        {
           label: 'bbw2025.buzz',
           click: () => openUrl('https://dapp.bbw2025.buzz/'),
         },
