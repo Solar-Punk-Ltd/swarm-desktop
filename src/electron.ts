@@ -38,7 +38,7 @@ export function rebuildElectronTray() {
       submenu: [
         {
           label: 'Event Communication Platform',
-          click: () => openUrl('https://bbw2025.buzz/'),
+          click: () => openUrl('https://dapp.bbw2025.buzz/'),
         },
         {
           label: 'Decentralized Wiki',
