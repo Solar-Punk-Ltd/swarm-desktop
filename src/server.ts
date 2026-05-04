@@ -12,7 +12,15 @@ import PACKAGE_JSON from '../package.json'
 
 import { getApiKey } from './api-key'
 import { sendBzzTransaction, sendNativeTransaction } from './blockchain'
-import { BEE_NODE_URL, dataDirFilePath, readConfigYaml, readWalletPasswordOrThrow, writeConfigYaml } from './config'
+import {
+  BEE_NODE_URL,
+  dataDirFilePath,
+  GIFT_WALLET_BZZ_PLUR_AMOUNT,
+  GIFT_WALLET_DAI_WEI_AMOUNT,
+  readConfigYaml,
+  readWalletPasswordOrThrow,
+  writeConfigYaml,
+} from './config'
 import { runLauncher } from './launcher'
 import { BeeManager } from './lifecycle'
 import { logger, readBeeDesktopLogs, readBeeLogs, subscribeLogServerRequests } from './logger'
@@ -132,8 +140,8 @@ export function runServer() {
     const blockchainRpcEndpoint = Reflect.get(config, 'blockchain-rpc-endpoint') as string
     const privateKeyString = await getPrivateKey()
     const { address } = context.params
-    await sendBzzTransaction(privateKeyString, address, '50000000000000000', blockchainRpcEndpoint)
-    await sendNativeTransaction(privateKeyString, address, '1000000000000000000', blockchainRpcEndpoint)
+    await sendBzzTransaction(privateKeyString, address, GIFT_WALLET_BZZ_PLUR_AMOUNT, blockchainRpcEndpoint)
+    await sendNativeTransaction(privateKeyString, address, GIFT_WALLET_DAI_WEI_AMOUNT, blockchainRpcEndpoint)
     context.body = { success: true }
   })
   router.post('/swap', async context => {
