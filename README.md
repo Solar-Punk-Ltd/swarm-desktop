@@ -54,7 +54,7 @@ There are some ways you can make this module better:
 Swarm Desktop consists of two components:
 
 1.  Electron back-end that provides orchestration API that retrieve, spins, stops and manage the Bee node
-2.  Bundled [Bee Dashboard](https://github.com/ethersphere/bee-dashboard) that provides UI to manage Bee node and provides access to Swarm network. It is launched with `isDesktop={true}` and `giftWalletFees` (the xDAI/xBZZ amounts used when creating a gift wallet, defined in `src/config.ts` as `GIFT_WALLET_DAI_WEI_AMOUNT` and `GIFT_WALLET_BZZ_PLUR_AMOUNT`).
+2.  Bundled [Bee Dashboard](https://github.com/ethersphere/bee-dashboard) that provides UI to manage Bee node and provides access to Swarm network. It is launched with `isDesktop={true}` and `giftWalletFees` (the xDAI/xBZZ amounts used when creating a gift wallet, defined in `src/gift-wallet-fees.ts` as `GIFT_WALLET_DAI_AMOUNT` and `GIFT_WALLET_BZZ_AMOUNT`).
 
 The Electron back-end is placed in `src` folder.
 
