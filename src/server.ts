@@ -1,5 +1,6 @@
 import { Wallet } from '@ethereumjs/wallet'
 import Router from '@koa/router'
+import { parseUnits } from 'ethers'
 import { readFile } from 'fs/promises'
 import Koa from 'koa'
 import koaBodyparser from 'koa-bodyparser'
@@ -12,7 +13,15 @@ import PACKAGE_JSON from '../package.json'
 
 import { getApiKey } from './api-key'
 import { sendBzzTransaction, sendNativeTransaction } from './blockchain'
-import { BEE_NODE_URL, dataDirFilePath, readConfigYaml, readWalletPasswordOrThrow, writeConfigYaml } from './config'
+import {
+  BEE_NODE_URL,
+  dataDirFilePath,
+  GIFT_WALLET_BZZ_AMOUNT,
+  GIFT_WALLET_DAI_AMOUNT,
+  readConfigYaml,
+  readWalletPasswordOrThrow,
+  writeConfigYaml,
+} from './config'
 import { runLauncher } from './launcher'
 import { BeeManager } from './lifecycle'
 import { logger, readBeeDesktopLogs, readBeeLogs, subscribeLogServerRequests } from './logger'
@@ -132,8 +141,18 @@ export function runServer() {
     const blockchainRpcEndpoint = Reflect.get(config, 'blockchain-rpc-endpoint') as string
     const privateKeyString = await getPrivateKey()
     const { address } = context.params
-    await sendBzzTransaction(privateKeyString, address, '50000000000000000', blockchainRpcEndpoint)
-    await sendNativeTransaction(privateKeyString, address, '1000000000000000000', blockchainRpcEndpoint)
+    await sendBzzTransaction(
+      privateKeyString,
+      address,
+      parseUnits(GIFT_WALLET_BZZ_AMOUNT, 16).toString(),
+      blockchainRpcEndpoint,
+    )
+    await sendNativeTransaction(
+      privateKeyString,
+      address,
+      parseUnits(GIFT_WALLET_DAI_AMOUNT, 18).toString(),
+      blockchainRpcEndpoint,
+    )
     context.body = { success: true }
   })
   router.post('/swap', async context => {
