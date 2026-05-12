@@ -6,7 +6,6 @@ import Koa from 'koa'
 import koaBodyparser from 'koa-bodyparser'
 import mount from 'koa-mount'
 import serve from 'koa-static'
-import fetch from 'node-fetch'
 import * as path from 'path'
 
 import PACKAGE_JSON from '../package.json'
@@ -32,7 +31,7 @@ import { swap } from './swap'
 
 const UI_DIST = path.join(__dirname, '..', '..', 'ui')
 const AUTO_UPDATE_ENABLED_PLATFORMS = ['darwin', 'win32']
-const TOKEN_SERVICE_URL = 'https://tokenservice.ethswarm.org/token_price'
+const TOKEN_SERVICE_URL = 'https://bff.cow.fi/1/tokens/0x19062190B1925b5b6689D7073fDfC8c2976EF8Cb/usdPrice'
 const PEERS_ENDPOINT = '/peers'
 
 interface PeersResponse {
@@ -71,7 +70,8 @@ export function runServer() {
   router.get('/price', async context => {
     try {
       const response = await fetch(TOKEN_SERVICE_URL)
-      context.body = await response.text()
+      const data = (await response.json()) as { price: number }
+      context.body = JSON.stringify(String(data.price))
     } catch (error) {
       logger.error(error)
       context.status = 503
