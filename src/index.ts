@@ -1,4 +1,4 @@
-import { app, dialog } from 'electron'
+import { app, dialog, powerMonitor } from 'electron'
 import squirrelInstallingExecution from 'electron-squirrel-startup'
 
 import PACKAGE_JSON from '../package.json'
@@ -13,7 +13,7 @@ import { initializeBee, runKeepAliveLoop, runLauncher } from './launcher'
 import { logger } from './logger'
 import { runMigrations } from './migration'
 import { findFreePort } from './port'
-import { runServer } from './server'
+import { isServerRunning, restartServer, runServer } from './server'
 import { initSplash, Splash } from './splash'
 import { getStatus } from './status'
 
@@ -101,6 +101,18 @@ async function main() {
 
   app.whenReady().then(() => {
     runScreenshot()
+
+    powerMonitor.on('resume', async () => {
+      logger.info('System resumed from sleep, checking HTTP server...')
+      await restartServer()
+    })
+
+    setInterval(() => {
+      if (!isServerRunning()) {
+        logger.info('HTTP server is not running, restarting...')
+        restartServer()
+      }
+    }, 10000)
   })
 }
 
