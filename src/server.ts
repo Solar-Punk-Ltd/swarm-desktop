@@ -2,6 +2,7 @@ import { Wallet } from '@ethereumjs/wallet'
 import Router from '@koa/router'
 import { parseUnits } from 'ethers'
 import { readFile } from 'fs/promises'
+import { Server } from 'http'
 import Koa from 'koa'
 import koaBodyparser from 'koa-bodyparser'
 import mount from 'koa-mount'
@@ -33,6 +34,28 @@ const UI_DIST = path.join(__dirname, '..', '..', 'ui')
 const AUTO_UPDATE_ENABLED_PLATFORMS = ['darwin', 'win32']
 const TOKEN_SERVICE_URL = 'https://bff.cow.fi/1/tokens/0x19062190B1925b5b6689D7073fDfC8c2976EF8Cb/usdPrice'
 const PEERS_ENDPOINT = '/peers'
+
+let serverInstance: Server | null = null
+let isRestarting = false
+
+export function isServerRunning(): boolean {
+  return isRestarting || (serverInstance !== null && serverInstance.listening)
+}
+
+export async function restartServer(): Promise<void> {
+  if (isRestarting) return
+  isRestarting = true
+  try {
+    if (serverInstance) {
+      const current = serverInstance
+      await new Promise<void>(resolve => current.close(() => resolve()))
+      serverInstance = null
+    }
+    runServer()
+  } finally {
+    isRestarting = false
+  }
+}
 
 interface PeersResponse {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -171,8 +194,8 @@ export function runServer() {
 
   app.use(router.routes())
   app.use(router.allowedMethods())
-  const server = app.listen(port.value)
-  subscribeLogServerRequests(server)
+  serverInstance = app.listen(port.value)
+  subscribeLogServerRequests(serverInstance)
 }
 
 async function getPrivateKey(): Promise<string> {
