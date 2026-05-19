@@ -107,10 +107,10 @@ async function main() {
       await restartServer()
     })
 
-    setInterval(() => {
+    setInterval(async () => {
       if (!isServerRunning()) {
         logger.info('HTTP server is not running, restarting...')
-        restartServer()
+        await restartServer()
       }
     }, 10000)
   })
