@@ -128,5 +128,12 @@ export function runElectronTray() {
 
     tray = new Tray(getTrayIcon())
     rebuildElectronTray()
+
+    // Catches Linux async DBus theme init + Windows live theme switching
+    if (process.platform !== 'darwin') {
+      nativeTheme.on('updated', () => {
+        tray.setImage(getTrayIcon())
+      })
+    }
   })
 }
