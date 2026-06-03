@@ -69,12 +69,12 @@
         async function finishCountdown() {
             try {
                 window.electron.hideCaptureWindow();
+                await new Promise(resolve => setTimeout(resolve, 150));
                 screenshotAudio.play();
                 await window.electron.takeScreenshot();
             } catch (err) {
                 console.error("Error during screenshot capture:", err);
             } finally {
-                // Reset state once finished
                 isCounting = false;
             }
         }

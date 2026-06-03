@@ -70,9 +70,10 @@ export function rebuildElectronTray() {
           return
         }
 
-        if (!sCaptureWindow || sCaptureWindow.isDestroyed()) {
-          sCaptureWindow = captureWindow.screenCaptureWindow()
+        if (sCaptureWindow && !sCaptureWindow.isDestroyed()) {
+          sCaptureWindow.destroy()
         }
+        sCaptureWindow = captureWindow.screenCaptureWindow()
         sCaptureWindow.show()
       },
     },
