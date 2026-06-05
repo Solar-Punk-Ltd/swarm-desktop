@@ -17,7 +17,7 @@ export function rebuildElectronTray() {
   }
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: 'Open Web UI',
+      label: 'Open in Browser',
       click: openDashboardInBrowser,
     },
     { type: 'separator' },
