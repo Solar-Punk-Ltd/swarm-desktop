@@ -121,10 +121,14 @@ export function runElectronTray() {
     })
   }
 
+  if (app.dock) {
+    // Don't override the dock icon: a static PNG disables macOS dock tinting (Tahoe).
+    // app.dock.setIcon(getAssetPath('icon.png'))
+    app.dock.hide()
+  }
+
   app.whenReady().then(() => {
     if (app.dock) {
-      // Don't override the dock icon: a static PNG disables macOS dock tinting (Tahoe).
-      // app.dock.setIcon(getAssetPath('icon.png'))
       app.dock.hide()
     }
 

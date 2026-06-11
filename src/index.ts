@@ -41,6 +41,7 @@ let splash: Splash | undefined
 async function main() {
   logger.info(`Bee Desktop version: ${PACKAGE_JSON.version} (${process.env.NODE_ENV ?? 'production'})`)
 
+  runElectronTray()
   splash = await initSplash()
 
   // Auto updater, latest version fails during import
@@ -91,7 +92,6 @@ async function main() {
   }
 
   runLauncher().catch(errorHandler)
-  runElectronTray()
 
   if (process.env.NODE_ENV !== 'development') openDashboardInBrowser()
   splash.hide()

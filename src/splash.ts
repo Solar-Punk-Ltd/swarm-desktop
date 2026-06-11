@@ -14,7 +14,13 @@ export async function initSplash(): Promise<Splash> {
       const splashPath = path.resolve(__dirname, '..', '..', '..', 'assets', 'splash.html')
       logger.info(`Serving splash screen from path ${splashPath}`)
 
-      const splash = new BrowserWindow({ width: 800, height: 600, frame: false })
+      const splash = new BrowserWindow({
+        width: 800,
+        height: 600,
+        frame: false,
+        title: 'Swarm Desktop',
+        icon: path.resolve(__dirname, '..', '..', '..', 'assets', 'icon.png'),
+      })
       splash.loadURL(`file://${splashPath}`).catch(reject)
 
       resolve({
