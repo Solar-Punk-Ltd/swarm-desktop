@@ -39,7 +39,41 @@ macOS may not allow you to run the `.app` after unzipping. To solve this, right-
 
 ## Usage
 
-TODO
+### First launch
+
+On first run a frameless splash screen (`src/splash.ts`) is shown while the Bee binary is downloaded and initialised. Once ready the splash disappears and Swarm Desktop runs silently from the **system tray** — no main window is opened automatically.
+
+### Tray menu
+
+Right-click (or click) the tray icon to access all controls (`src/electron.ts`):
+
+- **Open in Browser** — opens the Bee Dashboard web UI in your default browser
+- **Start Bee** / **Stop Bee** — start or stop the managed Bee node
+- **Apps** — quick links to community apps (Event Communication Platform, Decentralised Wiki, Decentralised OSM)
+- **Swarm Screenshot** — capture and share a screenshot via Swarm
+- **Logs** — opens the log folder in your file manager
+- **Quit** — stops Bee and exits the application
+
+### Ports
+
+| Service | Default | Range |
+|---|---|---|
+| Bee Dashboard | `3054` | auto-scans `3054`–`5000` (`src/port.ts`) |
+| Bee API | `1633` | fixed (`src/launcher.ts`) |
+
+### Data & logs locations
+
+Logs (Electron + Bee output):
+
+- macOS: `~/Library/Logs/Swarm Desktop/`
+- Windows: `%LOCALAPPDATA%\Swarm Desktop\Log\`
+- Linux: `~/.local/state/Swarm Desktop/`
+
+Data & configuration (Bee binary, config, wallet):
+
+- macOS: `~/Library/Application Support/Swarm Desktop`
+- Windows: `%LOCALAPPDATA%\Swarm Desktop\Data`
+- Linux: `~/.local/share/Swarm Desktop`
 
 ## Contribute
 
