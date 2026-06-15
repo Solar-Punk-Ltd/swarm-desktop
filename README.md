@@ -49,7 +49,7 @@ Right-click (or click) the tray icon to access all controls (`src/electron.ts`):
 
 - **Open in Browser** — opens the Bee Dashboard web UI in your default browser
 - **Start Bee** / **Stop Bee** — start or stop the managed Bee node
-- **Apps** — quick links to community apps (Event Communication Platform, Decentralised Wiki, Decentralised OSM)
+- **Apps** — quick links to community apps (Event Communication Platform, Decentralized Wiki, Decentralized OSM)
 - **Swarm Screenshot** — capture and share a screenshot via Swarm
 - **Logs** — opens the log folder in your file manager
 - **Quit** — stops Bee and exits the application
