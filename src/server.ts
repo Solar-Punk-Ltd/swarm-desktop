@@ -15,6 +15,7 @@ import { getApiKey } from './api-key'
 import { sendBzzTransaction, sendNativeTransaction } from './blockchain'
 import {
   BEE_NODE_URL,
+  configFile,
   dataDirFilePath,
   GIFT_WALLET_BZZ_AMOUNT,
   GIFT_WALLET_DAI_AMOUNT,
@@ -130,11 +131,12 @@ export function runServer() {
     }
   })
   router.post('/config', context => {
-    writeConfigYaml(context.request.body as Record<string, string>)
+    const { 'config-file-path': _, ...rest } = context.request.body as Record<string, unknown>
+    writeConfigYaml(rest)
     context.body = readConfigYaml()
   })
   router.get('/config', context => {
-    context.body = readConfigYaml()
+    context.body = { ...readConfigYaml(), 'config-file-path': getPath(configFile) }
   })
   router.get('/logs/bee-desktop', async context => {
     context.body = await readBeeDesktopLogs()
