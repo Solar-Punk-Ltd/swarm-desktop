@@ -50,4 +50,8 @@ export function runMigrations() {
   if (config['debug-api-enable'] !== undefined) {
     deleteKeyFromConfigYaml('debug-api-enable')
   }
+
+  if (config['resolver-options'] === 'https://cloudflare-eth.com') {
+    writeConfigYaml({ 'resolver-options': 'https://ethereum-rpc.publicnode.com' })
+  }
 }

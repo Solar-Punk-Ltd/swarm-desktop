@@ -32,7 +32,7 @@ swap-enable: false
 mainnet: true
 full-node: false
 cors-allowed-origins: '*'
-resolver-options: https://cloudflare-eth.com
+resolver-options: https://ethereum-rpc.publicnode.com
 data-dir: ${getPath(dataDirFilePath)}
 password: ${v4()}
 storage-incentives-enable: false`
