@@ -110,7 +110,7 @@ function getTrayIcon() {
   return getAssetPath('icon.png')
 }
 
-export function runElectronTray() {
+export function runElectronTray(): boolean {
   const gotTheLock = app.requestSingleInstanceLock()
 
   if (!gotTheLock) {
@@ -142,4 +142,6 @@ export function runElectronTray() {
       })
     }
   })
+
+  return gotTheLock
 }
