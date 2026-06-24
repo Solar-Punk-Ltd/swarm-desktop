@@ -52,6 +52,7 @@ jobs:
       - name: Publish MacOS arm64
         run: pnpm run publish:mac:arm64
         env:
+          DEBUG: electron-forge:*
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
