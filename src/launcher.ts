@@ -8,7 +8,10 @@ import { configFile, dataDirFilePath } from './config'
 import { rebuildElectronTray } from './electron'
 import { BeeManager } from './lifecycle'
 import { BeeLogFile, logger, MaxLogFileNumber, MaxLogFileRotateSize } from './logger'
+import { createNotification } from './notify'
 import { checkPath, getDefaultLogPath, getPath } from './path'
+
+let startFailureCount = 0
 
 export function runKeepAliveLoop() {
   setInterval(() => {
@@ -58,8 +61,14 @@ export async function runLauncher() {
   }
 
   BeeManager.setUserIntention(true)
+  let failed = false
   const subprocess = launchBee(abortController).catch(reason => {
+    failed = true
+    startFailureCount++
     logger.error(reason)
+    if (startFailureCount === 1 || startFailureCount % 5 === 0) {
+      createNotification('Bee failed to start. Open the Logs menu for details.')
+    }
   })
   BeeManager.signalRunning(abortController, subprocess)
   rebuildElectronTray()
@@ -67,6 +76,9 @@ export async function runLauncher() {
   logger.info('Bee subprocess finished running')
   abortController.abort()
   BeeManager.signalStopped()
+  if (!failed) {
+    startFailureCount = 0
+  }
   rebuildElectronTray()
 }
 
