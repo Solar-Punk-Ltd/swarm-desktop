@@ -88,7 +88,11 @@ async function ensureAsset(url: string, target: string, options: DownloadOptions
 }
 
 async function downloadFile(url: string, target: string): Promise<void> {
-  return fetch(url)
-    .then(async x => x.arrayBuffer())
-    .then(x => writeFileSync(target, Buffer.from(x)))
+  const res = await fetch(url)
+
+  if (!res.ok) {
+    throw new Error(`Failed to download ${url}: ${res.status} ${res.statusText}`)
+  }
+
+  writeFileSync(target, Buffer.from(await res.arrayBuffer()))
 }
