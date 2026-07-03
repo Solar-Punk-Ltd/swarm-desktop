@@ -116,10 +116,12 @@ async function runProcess(command: string, args: string[], abortController: Abor
     })
     fileStream.on('error', err => logger.error(err))
 
-    subprocess.stdout.pipe(fileStream)
-    subprocess.stderr.pipe(fileStream)
+    subprocess.stdout.pipe(fileStream, { end: false })
+    subprocess.stderr.pipe(fileStream, { end: false })
 
     subprocess.on('close', code => {
+      fileStream.end()
+
       if (code === 0) {
         resolve()
       } else {
@@ -127,6 +129,7 @@ async function runProcess(command: string, args: string[], abortController: Abor
       }
     })
     subprocess.on('error', error => {
+      fileStream.end()
       reject(error)
     })
   })
