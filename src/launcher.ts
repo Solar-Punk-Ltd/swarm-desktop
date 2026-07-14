@@ -70,6 +70,7 @@ export async function runLauncher() {
     failed = true
     startFailureCount++
     logger.error(reason)
+
     if (startFailureCount === 1 || startFailureCount % NOTIFY_EVERY_N_FAILURES === 0) {
       createNotification('Bee failed to start. Open the Logs menu for details.')
     }

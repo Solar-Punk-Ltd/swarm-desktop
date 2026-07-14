@@ -42,6 +42,7 @@ async function main() {
   logger.info(`Bee Desktop version: ${PACKAGE_JSON.version} (${process.env.NODE_ENV ?? 'production'})`)
 
   const gotTheLock = runElectronTray()
+
   if (!gotTheLock) return
   splash = await initSplash()
 
