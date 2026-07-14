@@ -83,6 +83,7 @@ export default defineConfig([
         require: 'readonly',
         window: 'readonly',
         setTimeout: 'readonly',
+        clearTimeout: 'readonly',
         process: 'readonly',
         localStorage: 'readonly',
         fetch: 'readonly',

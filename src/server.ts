@@ -1,18 +1,28 @@
 import { Wallet } from '@ethereumjs/wallet'
 import Router from '@koa/router'
+import { parseUnits } from 'ethers'
 import { readFile } from 'fs/promises'
+import { Server } from 'http'
 import Koa from 'koa'
 import koaBodyparser from 'koa-bodyparser'
 import mount from 'koa-mount'
 import serve from 'koa-static'
-import fetch from 'node-fetch'
 import * as path from 'path'
 
 import PACKAGE_JSON from '../package.json'
 
 import { getApiKey } from './api-key'
 import { sendBzzTransaction, sendNativeTransaction } from './blockchain'
-import { BEE_NODE_URL, dataDirFilePath, readConfigYaml, readWalletPasswordOrThrow, writeConfigYaml } from './config'
+import {
+  BEE_NODE_URL,
+  configFile,
+  dataDirFilePath,
+  GIFT_WALLET_BZZ_AMOUNT,
+  GIFT_WALLET_DAI_AMOUNT,
+  readConfigYaml,
+  readWalletPasswordOrThrow,
+  writeConfigYaml,
+} from './config'
 import { runLauncher } from './launcher'
 import { BeeManager } from './lifecycle'
 import { logger, readBeeDesktopLogs, readBeeLogs, subscribeLogServerRequests } from './logger'
@@ -23,8 +33,30 @@ import { swap } from './swap'
 
 const UI_DIST = path.join(__dirname, '..', '..', 'ui')
 const AUTO_UPDATE_ENABLED_PLATFORMS = ['darwin', 'win32']
-const TOKEN_SERVICE_URL = 'https://tokenservice.ethswarm.org/token_price'
+const TOKEN_SERVICE_URL = 'https://bff.cow.fi/1/tokens/0x19062190B1925b5b6689D7073fDfC8c2976EF8Cb/usdPrice'
 const PEERS_ENDPOINT = '/peers'
+
+let serverInstance: Server | null = null
+let isRestarting = false
+
+export function isServerRunning(): boolean {
+  return isRestarting || (serverInstance !== null && serverInstance.listening)
+}
+
+export async function restartServer(): Promise<void> {
+  if (isRestarting) return
+  isRestarting = true
+  try {
+    if (serverInstance) {
+      const current = serverInstance
+      await new Promise<void>(resolve => current.close(() => resolve()))
+      serverInstance = null
+    }
+    runServer()
+  } finally {
+    isRestarting = false
+  }
+}
 
 interface PeersResponse {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -62,7 +94,8 @@ export function runServer() {
   router.get('/price', async context => {
     try {
       const response = await fetch(TOKEN_SERVICE_URL)
-      context.body = await response.text()
+      const data = (await response.json()) as { price: number }
+      context.body = JSON.stringify(String(data.price))
     } catch (error) {
       logger.error(error)
       context.status = 503
@@ -98,11 +131,12 @@ export function runServer() {
     }
   })
   router.post('/config', context => {
-    writeConfigYaml(context.request.body as Record<string, string>)
+    const { 'config-file-path': _, ...rest } = context.request.body as Record<string, unknown>
+    writeConfigYaml(rest)
     context.body = readConfigYaml()
   })
   router.get('/config', context => {
-    context.body = readConfigYaml()
+    context.body = { ...readConfigYaml(), 'config-file-path': getPath(configFile) }
   })
   router.get('/logs/bee-desktop', async context => {
     context.body = await readBeeDesktopLogs()
@@ -132,8 +166,18 @@ export function runServer() {
     const blockchainRpcEndpoint = Reflect.get(config, 'blockchain-rpc-endpoint') as string
     const privateKeyString = await getPrivateKey()
     const { address } = context.params
-    await sendBzzTransaction(privateKeyString, address, '50000000000000000', blockchainRpcEndpoint)
-    await sendNativeTransaction(privateKeyString, address, '1000000000000000000', blockchainRpcEndpoint)
+    await sendBzzTransaction(
+      privateKeyString,
+      address,
+      parseUnits(GIFT_WALLET_BZZ_AMOUNT, 16).toString(),
+      blockchainRpcEndpoint,
+    )
+    await sendNativeTransaction(
+      privateKeyString,
+      address,
+      parseUnits(GIFT_WALLET_DAI_AMOUNT, 18).toString(),
+      blockchainRpcEndpoint,
+    )
     context.body = { success: true }
   })
   router.post('/swap', async context => {
@@ -152,8 +196,8 @@ export function runServer() {
 
   app.use(router.routes())
   app.use(router.allowedMethods())
-  const server = app.listen(port.value)
-  subscribeLogServerRequests(server)
+  serverInstance = app.listen(port.value)
+  subscribeLogServerRequests(serverInstance)
 }
 
 async function getPrivateKey(): Promise<string> {

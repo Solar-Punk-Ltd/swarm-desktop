@@ -1,4 +1,4 @@
-import { app, dialog } from 'electron'
+import { app, dialog, powerMonitor } from 'electron'
 import squirrelInstallingExecution from 'electron-squirrel-startup'
 
 import PACKAGE_JSON from '../package.json'
@@ -13,7 +13,7 @@ import { initializeBee, runKeepAliveLoop, runLauncher } from './launcher'
 import { logger } from './logger'
 import { runMigrations } from './migration'
 import { findFreePort } from './port'
-import { runServer } from './server'
+import { isServerRunning, restartServer, runServer } from './server'
 import { initSplash, Splash } from './splash'
 import { getStatus } from './status'
 
@@ -41,6 +41,9 @@ let splash: Splash | undefined
 async function main() {
   logger.info(`Bee Desktop version: ${PACKAGE_JSON.version} (${process.env.NODE_ENV ?? 'production'})`)
 
+  const gotTheLock = runElectronTray()
+
+  if (!gotTheLock) return
   splash = await initSplash()
 
   // Auto updater, latest version fails during import
@@ -91,7 +94,6 @@ async function main() {
   }
 
   runLauncher().catch(errorHandler)
-  runElectronTray()
 
   if (process.env.NODE_ENV !== 'development') openDashboardInBrowser()
   splash.hide()
@@ -101,6 +103,18 @@ async function main() {
 
   app.whenReady().then(() => {
     runScreenshot()
+
+    powerMonitor.on('resume', async () => {
+      logger.info('System resumed from sleep, checking HTTP server...')
+      await restartServer()
+    })
+
+    setInterval(async () => {
+      if (!isServerRunning()) {
+        logger.info('HTTP server is not running, restarting...')
+        await restartServer()
+      }
+    }, 10000)
   })
 }
 

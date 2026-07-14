@@ -1,0 +1,4 @@
+onlyBuiltDependencies:
+  - '@ethersphere/bee-dashboard'
+  - esbuild
+  - unrs-resolver

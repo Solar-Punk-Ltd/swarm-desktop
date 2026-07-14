@@ -17,7 +17,7 @@ export function rebuildElectronTray() {
   }
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: 'Open Web UI',
+      label: 'Open in Browser',
       click: openDashboardInBrowser,
     },
     { type: 'separator' },
@@ -70,9 +70,10 @@ export function rebuildElectronTray() {
           return
         }
 
-        if (!sCaptureWindow || sCaptureWindow.isDestroyed()) {
-          sCaptureWindow = captureWindow.screenCaptureWindow()
+        if (sCaptureWindow && !sCaptureWindow.isDestroyed()) {
+          sCaptureWindow.destroy()
         }
+        sCaptureWindow = captureWindow.screenCaptureWindow()
         sCaptureWindow.show()
       },
     },
@@ -109,7 +110,7 @@ function getTrayIcon() {
   return getAssetPath('icon.png')
 }
 
-export function runElectronTray() {
+export function runElectronTray(): boolean {
   const gotTheLock = app.requestSingleInstanceLock()
 
   if (!gotTheLock) {
@@ -120,13 +121,27 @@ export function runElectronTray() {
     })
   }
 
+  if (app.dock) {
+    // Don't override the dock icon: a static PNG disables macOS dock tinting (Tahoe).
+    // app.dock.setIcon(getAssetPath('icon.png'))
+    app.dock.hide()
+  }
+
   app.whenReady().then(() => {
     if (app.dock) {
-      app.dock.setIcon(getAssetPath('icon.png'))
       app.dock.hide()
     }
 
     tray = new Tray(getTrayIcon())
     rebuildElectronTray()
+
+    // Catches Linux async DBus theme init + Windows live theme switching
+    if (process.platform !== 'darwin') {
+      nativeTheme.on('updated', () => {
+        tray.setImage(getTrayIcon())
+      })
+    }
   })
+
+  return gotTheLock
 }
