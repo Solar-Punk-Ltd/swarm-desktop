@@ -8,6 +8,7 @@ export interface IElectronAPI {
   setCaptureWindowOpacity: () => void
   onImageDataURL: OnImageDataURL
   createElement: <T extends keyof HTMLElementTagNameMap>(args: CreateElementArg<T>) => HTMLElementTagNameMap[T]
+  getApiPort: () => Promise<number>
 }
 
 declare global {

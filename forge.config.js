@@ -76,9 +76,6 @@ const config = {
       'entitlements-inherit': 'assets/entitlements.plist',
     },
   },
-  electronInstallerDebian: {
-    bin: 'Swarm Desktop',
-  },
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
@@ -103,6 +100,9 @@ const config = {
       config: {
         options: {
           icon: `${iconPath}.png`,
+          scripts: {
+            prerm: path.resolve(__dirname, 'assets', 'linux', 'prerm'),
+          },
         },
       },
     },
