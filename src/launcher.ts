@@ -108,7 +108,6 @@ async function runProcess(command: string, args: string[], abortController: Abor
     subprocess.stdout.pipe(process.stdout)
     subprocess.stderr.pipe(process.stderr)
 
-    // Also store the logs to the log dir
     forwardLines(subprocess.stdout, line => beeLogger.info(line))
     forwardLines(subprocess.stderr, line => beeLogger.info(line))
 
