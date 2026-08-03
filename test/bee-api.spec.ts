@@ -24,35 +24,41 @@ jest.mock('@ethersphere/bee-js', () => {
   return {
     Bee: jest.fn().mockImplementation(_ => {
       return {
-        isConnected: jest.fn(),
-        getPostageBatches: jest.fn(),
-        uploadFile: jest.fn(),
+        connectivity: { isConnected: jest.fn() },
+        stamp: { getAll: jest.fn() },
+        file: { upload: jest.fn() },
       }
     }),
   }
 })
 
+type MockBee = {
+  connectivity: { isConnected: jest.Mock }
+  stamp: { getAll: jest.Mock }
+  file: { upload: jest.Mock }
+}
+
 describe('Bee utility functions', () => {
-  let mockBeeInstance: jest.Mocked<Bee>
+  let mockBeeInstance: MockBee
 
   beforeEach(() => {
-    mockBeeInstance = new Bee(BEE_NODE_URL) as jest.Mocked<Bee>
+    mockBeeInstance = new Bee(BEE_NODE_URL) as unknown as MockBee
     // eslint-disable-next-line no-import-assign
     ;(getBeeInstance as jest.Mock) = jest.fn(() => mockBeeInstance)
   })
 
   describe('nodeIsConnected', () => {
     it('should return true when node is connected', async () => {
-      mockBeeInstance.isConnected.mockResolvedValue(true)
+      mockBeeInstance.connectivity.isConnected.mockResolvedValue(true)
 
       const res = await nodeIsConnected()
 
       expect(res).toBe(true)
-      expect(mockBeeInstance.isConnected).toHaveBeenCalled()
+      expect(mockBeeInstance.connectivity.isConnected).toHaveBeenCalled()
     })
 
     it('should throw an error when there is an issue checking connection', async () => {
-      mockBeeInstance.isConnected.mockRejectedValue(new Error('Connection failed'))
+      mockBeeInstance.connectivity.isConnected.mockRejectedValue(new Error('Connection failed'))
 
       await expect(nodeIsConnected()).rejects.toThrow('Connection failed')
     })
@@ -60,7 +66,7 @@ describe('Bee utility functions', () => {
 
   describe('getPostageBatches', () => {
     it('should return only usable postage batches', async () => {
-      mockBeeInstance.getPostageBatches.mockResolvedValue([
+      mockBeeInstance.stamp.getAll.mockResolvedValue([
         { batchID: { toHex: () => 'batch1' }, usable: true },
         { batchID: { toHex: () => 'batch2' }, usable: false },
         { batchID: { toHex: () => 'batch3' }, usable: true },
@@ -73,11 +79,11 @@ describe('Bee utility functions', () => {
         { batchID: 'batch1', usable: true },
         { batchID: 'batch3', usable: true },
       ])
-      expect(mockBeeInstance.getPostageBatches).toHaveBeenCalled()
+      expect(mockBeeInstance.stamp.getAll).toHaveBeenCalled()
     })
 
     it('should throw an error if getPostageBatches fails', async () => {
-      mockBeeInstance.getPostageBatches.mockRejectedValue(new Error('Failed to fetch batches'))
+      mockBeeInstance.stamp.getAll.mockRejectedValue(new Error('Failed to fetch batches'))
 
       await expect(getPostageBatches()).rejects.toThrow('Failed to fetch batches')
     })
@@ -99,11 +105,11 @@ describe('Bee utility functions', () => {
         name: 'test-img.png',
       }
 
-      mockBeeInstance.uploadFile.mockResolvedValue(mockResponse)
+      mockBeeInstance.file.upload.mockResolvedValue(mockResponse)
       const result = await handleFileUpload(args)
 
       expect(result).toEqual(mockResponse)
-      expect(mockBeeInstance.uploadFile).toHaveBeenCalledWith(
+      expect(mockBeeInstance.file.upload).toHaveBeenCalledWith(
         args.batchID,
         args.imgBuffer,
         args.name,
@@ -113,7 +119,7 @@ describe('Bee utility functions', () => {
 
     it('should throw an error if uploadFile fails', async () => {
       const errMsg = 'File upload failed.'
-      mockBeeInstance.uploadFile.mockRejectedValue(new Error(errMsg))
+      mockBeeInstance.file.upload.mockRejectedValue(new Error(errMsg))
 
       const args = {
         batchID: 'batch123',
@@ -123,7 +129,7 @@ describe('Bee utility functions', () => {
 
       await expect(handleFileUpload(args)).rejects.toThrow(errMsg)
 
-      expect(mockBeeInstance.uploadFile).toHaveBeenCalledWith(
+      expect(mockBeeInstance.file.upload).toHaveBeenCalledWith(
         args.batchID,
         args.imgBuffer,
         args.name,
