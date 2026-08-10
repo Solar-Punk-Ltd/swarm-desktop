@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld('electron', {
   setTitle: (t: string) => ipcRenderer.send('set-title', t),
   nodeIsConnected: async () => ipcRenderer.invoke('node-is-connected'),
   getAllPostageBatch: async () => ipcRenderer.invoke('get-all-postage-batch'),
+  getApiPort: async () => ipcRenderer.invoke('get-api-port'),
   createPostageStamp: () => ipcRenderer.send('create-postage-stamp'),
   updatePostageStampState: (cb: (ps: PostageBatch[]) => void) =>
     ipcRenderer.on('update-postage-stamp-state', (_, ps) => cb(ps)),
