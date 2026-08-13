@@ -1,4 +1,4 @@
-import { Bee } from '@ethersphere/bee-js'
+import type { Bee } from '@ethersphere/bee-js'
 import type { Mocked } from 'vitest'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
