@@ -36,8 +36,10 @@ describe('Bee utility functions', () => {
   let mockBeeInstance: Mocked<Bee>
 
   beforeEach(() => {
-    vi.clearAllMocks()
     mockBeeInstance = getBeeInstance() as Mocked<Bee>
+    mockBeeInstance.isConnected.mockReset()
+    mockBeeInstance.getPostageBatches.mockReset()
+    mockBeeInstance.uploadFile.mockReset()
   })
 
   describe('nodeIsConnected', () => {
