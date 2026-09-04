@@ -1,6 +1,7 @@
 import { desktopCapturer, dialog, ipcMain, nativeImage } from 'electron'
 
 import { logger } from '../../logger'
+import { port } from '../../port'
 
 import { getPostageBatches, handleFileUpload, nodeIsConnected } from './utils/bee-api'
 import { captureWindow } from './windows/capture/capture'
@@ -65,6 +66,8 @@ function takeScreenshotImplementation() {
   ipcMain.handle('get-all-postage-batch', async () => {
     return await getPostageBatches()
   })
+
+  ipcMain.handle('get-api-port', () => port.value)
 
   ipcMain.on('create-postage-stamp', evnt => {
     const getAllPostageBatchIntervalID = setInterval(async () => {
