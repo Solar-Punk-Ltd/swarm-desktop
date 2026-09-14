@@ -5,6 +5,7 @@ import * as screenshot from './plugins/screenshot'
 import { openDashboardInBrowser, openUrl } from './browser'
 import { runLauncher } from './launcher'
 import { BeeManager } from './lifecycle'
+import { logger } from './logger'
 import { createNotification } from './notify'
 import { getAssetPath, paths } from './path'
 
@@ -27,7 +28,10 @@ export function rebuildElectronTray() {
         if (BeeManager.isRunning()) {
           BeeManager.stop()
         } else {
-          runLauncher()
+          runLauncher().catch(error => {
+            logger.error(error)
+            createNotification('Bee failed to start. Open the Logs menu for details.')
+          })
         }
       },
     },

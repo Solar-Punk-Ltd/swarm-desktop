@@ -9,6 +9,7 @@ import { promisify } from 'util'
 import { BEE_VERSION } from './config'
 import { logger } from './logger'
 import { getPath, paths } from './path'
+import { wait } from './utility'
 
 interface DownloadOptions {
   checkTarget?: string[]
@@ -17,6 +18,9 @@ interface DownloadOptions {
 }
 
 const unzipAsync = promisify(unzip)
+
+const DOWNLOAD_MAX_ATTEMPTS = 3
+const DOWNLOAD_RETRY_DELAY_MS = 5000
 
 const archTable = {
   arm64: 'arm64',
@@ -88,11 +92,27 @@ async function ensureAsset(url: string, target: string, options: DownloadOptions
 }
 
 async function downloadFile(url: string, target: string): Promise<void> {
-  const res = await fetch(url)
+  for (let attempt = 1; attempt <= DOWNLOAD_MAX_ATTEMPTS; attempt++) {
+    try {
+      const res = await fetch(url)
 
-  if (!res.ok) {
-    throw new Error(`Failed to download ${url}: ${res.status} ${res.statusText}`)
+      if (!res.ok) {
+        throw new Error(`Failed to download ${url}: ${res.status} ${res.statusText}`)
+      }
+
+      writeFileSync(target, Buffer.from(await res.arrayBuffer()))
+
+      return
+    } catch (error) {
+      if (attempt >= DOWNLOAD_MAX_ATTEMPTS) {
+        throw error
+      }
+
+      logger.warn(
+        `Download attempt ${attempt}/${DOWNLOAD_MAX_ATTEMPTS} failed for ${url}, retrying in ${DOWNLOAD_RETRY_DELAY_MS}ms:`,
+        error,
+      )
+      await wait(DOWNLOAD_RETRY_DELAY_MS)
+    }
   }
-
-  writeFileSync(target, Buffer.from(await res.arrayBuffer()))
 }
