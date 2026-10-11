@@ -10,6 +10,16 @@ import { getAssetPath, paths } from './path'
 
 let tray: Tray
 let sCaptureWindow: BrowserWindow
+let isShuttingDown = false
+
+export async function gracefulShutdown() {
+  if (isShuttingDown) {
+    return
+  }
+  isShuttingDown = true
+  BeeManager.stop()
+  await BeeManager.waitForSigtermToFinish()
+}
 
 export function rebuildElectronTray() {
   if (!tray) {
@@ -86,8 +96,7 @@ export function rebuildElectronTray() {
     {
       label: 'Quit',
       click: async () => {
-        BeeManager.stop()
-        await BeeManager.waitForSigtermToFinish()
+        await gracefulShutdown()
         app.quit()
       },
     },
@@ -118,6 +127,22 @@ export function runElectronTray(): boolean {
   } else {
     app.on('second-instance', () => {
       createNotification('Swarm is already running. Please close the previous instance first.')
+      openDashboardInBrowser()
+    })
+
+    app.on('before-quit', event => {
+      if (isShuttingDown) {
+        return
+      }
+      event.preventDefault()
+      gracefulShutdown().then(() => app.exit(0))
+    })
+
+    process.on('SIGTERM', () => {
+      gracefulShutdown().then(() => app.exit(0))
+    })
+    process.on('SIGINT', () => {
+      gracefulShutdown().then(() => app.exit(0))
     })
   }
 

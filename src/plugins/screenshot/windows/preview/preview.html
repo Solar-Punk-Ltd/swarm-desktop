@@ -342,9 +342,10 @@
                     row.insertAdjacentElement("afterbegin", container);
                     modalContent.insertAdjacentElement("beforeend", row);
 
-                    openBeeDashboardBtn.onclick = function () {
+                    openBeeDashboardBtn.onclick = async function () {
 
-                        iframe.src = "http://localhost:3054/dashboard/?#/account/stamps";
+                        const apiPort = await window.electron.getApiPort();
+                        iframe.src = `http://localhost:${apiPort}/dashboard/?#/account/stamps`;
                         window.electron.createPostageStamp();
 
                         if (modalContent.lastChild) {

@@ -1,0 +1,44 @@
+#!/bin/sh
+set -e
+
+# dpkg runs this script right before removing this package's files - both on a plain
+# "apt remove" and, during an upgrade, before the new .deb's files are unpacked. If the
+# app (and the Bee node it manages) are still running, killing them here lets the app's
+# own SIGTERM handler stop Bee gracefully before the install proceeds, instead of
+# leaving an orphaned process running against files that no longer exist on disk.
+#
+# The .desktop launcher starts this app via bare "swarm-desktop" (resolved through
+# $PATH), so its argv/cmdline never contains our install path - "pgrep -f" against a
+# path would miss the main process. /proc/PID/exe is a kernel-resolved symlink to the
+# real binary regardless of how the process was invoked, so match on that instead.
+APP_BIN="/usr/lib/swarm-desktop/swarm-desktop"
+
+find_app_pids() {
+  for exe in /proc/[0-9]*/exe; do
+    target=$(readlink "$exe" 2>/dev/null) || continue
+    if [ "$target" = "$APP_BIN" ]; then
+      pid=${exe#/proc/}
+      echo "${pid%/exe}"
+    fi
+  done
+}
+
+pids=$(find_app_pids)
+
+if [ -n "$pids" ]; then
+  kill -TERM $pids 2>/dev/null || true
+
+  i=0
+  while [ "$i" -lt 15 ]; do
+    pids=$(find_app_pids)
+    [ -z "$pids" ] && break
+    sleep 1
+    i=$((i + 1))
+  done
+
+  # Still around after the grace period given for graceful shutdown - force it closed.
+  pids=$(find_app_pids)
+  [ -n "$pids" ] && kill -KILL $pids 2>/dev/null || true
+fi
+
+exit 0
